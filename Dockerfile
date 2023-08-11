@@ -7,5 +7,7 @@ COPY ./cmd /tmp/build/cmd
 RUN go build -v -o commit-status-poster cmd/commit-status-poster/main.go
 FROM scratch
 USER 1000:1000
+COPY --chown=0:0 --chmod=004 --from=alpine:latest /etc/ssl/certs/ca-certificates.crt /ca-certificates.crt
+ENV SSL_CERT_FILE=/ca-certificates.crt
 COPY --chown=0:0 --chmod=001 --from=build /tmp/build/commit-status-poster /commit-status-poster
 ENTRYPOINT ["/commit-status-poster"]
