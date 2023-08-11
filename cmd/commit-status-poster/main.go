@@ -20,9 +20,9 @@ func envAsInt64(envVar string) int64 {
 }
 
 func newGithubClient() *github.Client {
-	appId := envAsInt64("GITHUB_APP_ID")
+	appId          := envAsInt64("GITHUB_APP_ID")
 	installationId := envAsInt64("GITHUB_APP_INSTALLATION_ID")
-	privateKeyFile := os.Getenv("GITHUB_APP_PRIVATE_KEY_FILE")
+	privateKeyFile :=  os.Getenv("GITHUB_APP_PRIVATE_KEY_FILE")
 	itr, err := ghinstallation.NewKeyFromFile(http.DefaultTransport, appId, installationId, privateKeyFile)
 	if err != nil {
 		panic(err)
@@ -32,10 +32,10 @@ func newGithubClient() *github.Client {
 
 func newStatus() *github.RepoStatus {
 	return &github.RepoStatus{
-		State: github.String(os.Getenv("GITHUB_COMMIT_STATUS_STATE")),
-		TargetURL: github.String(os.Getenv("GITHUB_COMMIT_STATUS_TARGET_URL")),
+		State:       github.String(os.Getenv("GITHUB_COMMIT_STATUS_STATE")),
+		TargetURL:   github.String(os.Getenv("GITHUB_COMMIT_STATUS_TARGET_URL")),
 		Description: github.String(os.Getenv("GITHUB_COMMIT_STATUS_DESCRIPTION")),
-		Context: github.String(os.Getenv("GITHUB_COMMIT_STATUS_CONTEXT")),
+		Context:     github.String(os.Getenv("GITHUB_COMMIT_STATUS_CONTEXT")),
 	}
 }
 
