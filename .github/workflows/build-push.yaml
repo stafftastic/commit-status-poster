@@ -11,9 +11,10 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v3
     - name: Build and Push
-      uses: stafftastic/docker-build-push-action@main
+      uses: stafftastic/docker-build-push-action@nix
       with:
         name: commit-status-poster
+        derivation: .#dockerImage
         project: stafftastic
         repository: images
         serviceAccountKey: ${{secrets.GOOGLE_ARTIFACT_REGISTRY_SA_KEY}}
