@@ -30,6 +30,16 @@ jobs:
           username: _json_key
           password: ${{secrets.GOOGLE_ARTIFACT_REGISTRY_SA_KEY}}
 
+      - uses: docker/metadata-action@v6.2.0
+        id: meta
+        with:
+          images: europe-west3-docker.pkg.dev/stafftastic/images/commit-status-poster
+          tags: |
+            type=semver,pattern={{version}}
+            type=semver,pattern={{major}}.{{minor}}
+            type=semver,pattern={{major}}
+            type=ref,event=tag
+
       - run: nix build .#dockerImage
       - id: load
         run: |
@@ -39,6 +49,8 @@ jobs:
           )" >> "$GITHUB_OUTPUT"
       - run: |
           registry_image="europe-west3-docker.pkg.dev/stafftastic/images/commit-status-poster"
-          docker image tag ${{steps.load.outputs.image}} $registry_image:latest
-          docker image tag ${{steps.load.outputs.image}} $registry_image:${{github.ref_name}}
+          while IFS= read -r tag; do
+            [ -n "$tag" ] || continue
+            docker image tag ${{steps.load.outputs.image}} "$tag" </dev/null
+          done <<< "${{steps.meta.outputs.tags}}"
           docker push --all-tags $registry_image
