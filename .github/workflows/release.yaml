@@ -18,7 +18,7 @@ jobs:
     runs-on: hetzner-incus
     steps:
       - uses: actions/checkout@v7.0.1
-      - uses: stafftastic/github-actions/nix-auth@v1.6.0
+      - uses: stafftastic/github-actions/nix-auth@v1.9.0
         with:
           private-key: ${{secrets.NIX_REPOSITORY_ACCESS_PRIVATE_KEY}}
       - uses: Mic92/niks3-action@v1.1.0
